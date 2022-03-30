@@ -38,11 +38,10 @@ class KnowledgeBase:
             self.listOfRules.append(rule)
 
 
-def FCEntails(kb, q):
+def FCEntails(kb, q, order = []):
     count = {}
     inferred = {}
     queue = []
-    order = []
 
     for symbol in kb.listOfSymbols:
         inferred[symbol.lit] = False
@@ -57,6 +56,7 @@ def FCEntails(kb, q):
     while len(queue) != 0:
         p = queue.pop()
         print(p.lit)
+        order.append(p.lit)
         if p == q:
             return True
         if not inferred[p.lit]:
@@ -107,32 +107,48 @@ def BCEntails(kb, q, inferred=[], count=[], orderList=[]):
 
 
 
-
+print("First test: ")
 nB11 = Literal("B(1,1)", True)
 nB11.setTruthValue(True)
-#B21 = Literal("B(2,1)")
-#B21.setTruthValue(True)
 nP12 = Literal("P(1,2)", True)
 nP21 = Literal("P(2,1)", True)
 nP12 = Literal("P(1,2)", True)
-
-
 R1 = Sentence([nB11], [nP12], "R1")
 R2 = Sentence([nB11], [nP21], "R2")
-
-
-
 symbols = [nB11, nP12, nP21, nP12]
 rules = [R1, R2]
-
 KB = KnowledgeBase(symbols, rules)
-result = FCEntails(KB, nP12)
-print(result)
 
-print("bc:")
+orderlist = []
+result = FCEntails(KB, nP12, orderlist)
+print("FC results: ", result)
+print("The order of analyzed symbols in FC is the following: ", orderlist)
+
 orderlist = []
 result2 = BCEntailment(KB, nP12, orderlist)
-print(result2)
-print(orderlist)
+print("BC results: ", result2)
+print("The order of analyzed symbols in BC is the following: ", orderlist)
+
+print("\nSecond test: ")
+nB11 = Literal("B(1,1)", True)
+nB11.setTruthValue(True)
+nP12 = Literal("P(1,2)", True)
+nP21 = Literal("P(2,1)", True)
+P12 = Literal("P(1,2)")
+R1 = Sentence([nB11], [nP12], "R1")
+R2 = Sentence([nB11], [nP21], "R2")
+symbols = [nB11, nP12, nP21, P12]
+rules = [R1, R2]
+KB = KnowledgeBase(symbols, rules)
+
+orderlist = []
+result = FCEntails(KB, P12, orderlist)
+print("FC results: ", result)
+print("The order of analyzed symbols in FC is the following: ", orderlist)
+
+orderlist = []
+result2 = BCEntailment(KB, P12, orderlist)
+print("BC results: ", result2)
+print("The order of analyzed symbols in BC is the following: ", orderlist)
 
 
