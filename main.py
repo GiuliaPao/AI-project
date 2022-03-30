@@ -72,7 +72,6 @@ def FCEntails(kb, q):
     return False
 
 
-
 def BCEntailment(kb, q, orderList=[]):
     count = {}
     inferred = {}
@@ -105,6 +104,8 @@ def BCEntails(kb, q, inferred=[], count=[], orderList=[]):
                     q.truthValue = True
                     return True
     return False
+
+
 
 
 nB11 = Literal("B(1,1)", True)
